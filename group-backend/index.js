@@ -13,20 +13,18 @@ import { Pool } from 'pg';
 
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "Chatgroup",
-    password: "missionspace",
-    port: 5432,
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 
-app.use(cors({
-    origin: "http://172.20.10.7:5173",
-    methods: ["GET", "POST"]
-}));
+
+app.use(cors());
 
 
 app.use(express.json());
@@ -36,9 +34,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://172.20.10.7:5173",
-        methods: ["GET", "POST"],
-        credentials: true
+        origin: "*",
+        methods: ["GET", "POST"]
     }
 });
 
@@ -102,6 +99,6 @@ app.post("/signup", async (req, res) => {
 });
 
 
-server.listen(3000, () => {
-    console.log("Server is Running");
+server.listen(PORT, () => {
+    console.log("Server running on", PORT);
 });
