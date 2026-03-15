@@ -1,6 +1,6 @@
 import {io} from "socket.io-client";
 
-const URL = "http://172.20.10.7:3000";
+const URL = "https://group-chat-backend-ap6w.onrender.com";
 let socket;
 
 export const createSocket = (user) => {

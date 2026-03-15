@@ -43,7 +43,7 @@ function App() {
   useEffect(() => {
     const handleSubmit = async () => {
 
-      const res = await fetch("http://172.20.10.7:3000/signup", {
+      const res = await fetch("https://group-chat-backend-ap6w.onrender.com/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
