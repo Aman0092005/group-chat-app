@@ -127,7 +127,10 @@ function App() {
   function logoutHandler()
   {
     setIsAuthenticated(false);
-    socket.removeAllListeners();
+    socket.off("connect");
+    socket.off("chat message");
+    socket.off("usersOnlineCount");
+    socket.off("disconnect");
     socket.disconnect();
   }
 
