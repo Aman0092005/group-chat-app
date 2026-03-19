@@ -96,10 +96,11 @@ function App() {
         console.log("Disconnect");
       });
 
-      socket.on("chat message", (msg) => {
-        // console.log(msg);
-        setMessages((prev => [...prev, msg]));
-      });
+      const handleMessage = (msg) => {
+      setMessages((prev) => [...prev, msg]);
+      };
+      socket.on("chat message", handleMessage);
+
       socket.on("usersOnlineCount", (count) => {
         console.log(count);
         setUsersOnlineCount(count.onlineUsersCount);
@@ -111,7 +112,7 @@ function App() {
 
       return () => {
         socket.off("connect");
-        socket.off("chat message");
+         socket.on("chat message", handleMessage);
         socket.off("usersOnlineCount");
         socket.off("disconnect");
       }
