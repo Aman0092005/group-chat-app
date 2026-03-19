@@ -77,12 +77,17 @@ io.on("connection", (socket) => {
 app.post("/signup", async (req, res) => {
     // console.log(req.body);
     // console.log(req.body.isLogin);
+    let again = false;
     for(let i=0;i<onlineUsers.length;i++)
     {
         if(onlineUsers[i].user_id === req.body.userId)
-            res.json({isProblem: true, msg: "User already login"});
+        {
+            again = true;
+        }
     }
-    if (!req.body.isLogin) {
+    if(again)
+        res.json({isProblem: true, msg: "User already login"});
+    else if (!req.body.isLogin) {
         const data = await pool.query("SELECT * FROM users WHERE $1 = user_id OR $2 = email", [req.body.userId, req.body.email]);
         if (data.rows.length > 0) {
             res.json({ isProblem: true });
