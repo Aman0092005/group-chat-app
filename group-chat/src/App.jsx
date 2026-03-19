@@ -126,6 +126,7 @@ function App() {
   function logoutHandler()
   {
     setIsAuthenticated(false);
+    socket.removeAllListeners();
     socket.disconnect();
   }
 
