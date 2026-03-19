@@ -111,8 +111,9 @@ function App() {
 
       return () => {
         socket.off("connect");
-        socket.off("disconnect");
         socket.off("chat message");
+        socket.off("usersOnlineCount");
+        socket.off("disconnect");
       }
     }
 
