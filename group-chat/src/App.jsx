@@ -127,13 +127,13 @@ function App() {
 
   function logoutHandler()
   {
-    setMessages([]);
     setIsAuthenticated(false);
     socket.off("connect");
     socket.off("chat message");
     socket.off("usersOnlineCount");
     socket.off("disconnect");
     socket.disconnect();
+    setMessages([]);
   }
 
 
