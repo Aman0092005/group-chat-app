@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 
 import { Pool } from 'pg';
+import { isPromise } from "node:util/types";
 // const { Pool } = pkg;
 
 
@@ -54,7 +55,7 @@ io.on("connection", (socket) => {
     io.emit("usersOnlineCount", {onlineUsersCount,onlineUsers});
 
     socket.on("chat message", (msg) => {
-        console.log(msg);
+        // console.log(msg);
         io.emit("chat message", msg);
     });
 
@@ -76,6 +77,11 @@ io.on("connection", (socket) => {
 app.post("/signup", async (req, res) => {
     // console.log(req.body);
     // console.log(req.body.isLogin);
+    for(let i=0;i<onlineUsers.length;i++)
+    {
+        if(onlineUsers[i].user_id === req.body.userId)
+            res.json({isProblem: true, msg: "User already login"});
+    }
     if (!req.body.isLogin) {
         const data = await pool.query("SELECT * FROM users WHERE $1 = user_id OR $2 = email", [req.body.userId, req.body.email]);
         if (data.rows.length > 0) {
