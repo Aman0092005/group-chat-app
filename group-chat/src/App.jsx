@@ -132,6 +132,7 @@ function App() {
     socket.off("usersOnlineCount");
     socket.off("disconnect");
     socket.disconnect();
+    setMessages([]);
   }
 
 
