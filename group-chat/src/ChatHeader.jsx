@@ -7,7 +7,7 @@
 
 
 
-function ChatHeader()
+function ChatHeader({clearBtn})
 {
 
     return (
@@ -16,7 +16,7 @@ function ChatHeader()
                 <img src="https://picsum.photos/200" alt="Random image" />
                 <p>World Chat</p>
             </div>
-            <button>Clear all</button>
+            <button onClick={() => clearBtn()}>Clear all</button>
         </div>
     );
 }

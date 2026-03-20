@@ -8,7 +8,7 @@ import ChatMain from "./ChatMain";
 import SendMessageButton from "./SendMessageButton";
 
 
-function MainBox({input,setInput,sendingMessage,messages,currentUser,userName,country,avtar,usersOnlineCount,userOnline})
+function MainBox({input,setInput,sendingMessage,messages,currentUser,userName,country,avtar,usersOnlineCount,userOnline,clearBtn})
 {
 
     return (
@@ -19,7 +19,7 @@ function MainBox({input,setInput,sendingMessage,messages,currentUser,userName,co
                 {/* <Friends /> */}
             </div>
             <div className="inner-right-box">
-                <ChatHeader />
+                <ChatHeader clearBtn={clearBtn} />
                 <ChatMain messages={messages} currentUser={currentUser} />
                 <SendMessageButton input={input} setInput={setInput} sendingMessage={sendingMessage} />
             </div>

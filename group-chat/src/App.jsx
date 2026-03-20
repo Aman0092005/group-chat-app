@@ -137,6 +137,11 @@ function App() {
   }
 
 
+  function clearBtn()
+  {
+    setMessages([]);
+  }
+
 
   return (
     isAuthenticated ? <div>
@@ -152,6 +157,7 @@ function App() {
         avtar={avtar}
         usersOnlineCount={usersOnlineCount}
         userOnline={userOnline}
+        clearBtn={clearBtn}
       />
     </div> : <Signup
       userId={userId}
