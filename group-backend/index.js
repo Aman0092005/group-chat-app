@@ -6,7 +6,7 @@ import cors from "cors";
 import { Pool } from 'pg';
 import { isPromise } from "node:util/types";
 // const { Pool } = pkg;
-
+import bcrypt from "bcrypt";
 
 
 
@@ -93,23 +93,56 @@ app.post("/signup", async (req, res) => {
             res.json({ isProblem: true });
         }
         else {
-            const data = await pool.query("INSERT INTO users(user_id,email,password,name,country,icon) VALUES($1,$2,$3,$4,$5,$6) RETURNING *", [req.body.userId, req.body.email, req.body.password, req.body.nam, req.body.countryName, req.body.avtar]);
+            const data = await pool.query("INSERT INTO users(user_id,email,password,name,country,icon) VALUES($1,$2,$3,$4,$5,$6) RETURNING *", [req.body.userId, req.body.email,await hashPassword(req.body.password) , req.body.nam, req.body.countryName, req.body.avtar]);
             onlineUsers.push(data.rows[0]);
             res.json({ isProblem: false, userId: req.body.userId, name: req.body.nam, country: req.body.countryName, icon: req.body.avtar });
         }
     } else {
-        const data = await pool.query("SELECT user_id,name,country,icon FROM users WHERE $1 = user_id AND $2 = email AND $3 = password", [req.body.userId, req.body.email, req.body.password]);
+        const data = await pool.query("SELECT user_id,name,country,icon,password FROM users WHERE $1 = user_id AND $2 = email", [req.body.userId, req.body.email,]);
         if (data.rows.length <= 0)
             res.json({ isProblem: true });
         else
         {
-            onlineUsers.push(data.rows[0]);
-            res.json({ isProblem: false, userId: data.rows[0].user_id, name: data.rows[0].name, icon: data.rows[0].icon, country: data.rows[0].country });
+            const isPasswordCorrect = await compareHash(req.body.password,data.rows[0].password);
+            if(!isPasswordCorrect)
+                res.json({isProblem: true});
+            else
+            {
+                onlineUsers.push(data.rows[0]);
+                res.json({ isProblem: false, userId: data.rows[0].user_id, name: data.rows[0].name, icon: data.rows[0].icon, country: data.rows[0].country });
+            }
         }
     }
 });
 
 
+//temporary
+// app.get("/temp",(req,res) => {
+//     hashPassword("amansingh");
+//     res.json({name:"Aman Kumar"});
+// })
+
+
 server.listen(PORT, () => {
     console.log("Server running on", PORT);
 });
+
+
+
+
+
+
+
+
+//fucntions
+async function hashPassword(password)
+{
+    const salt = await bcrypt.genSalt(10);
+    const hash =  await bcrypt.hash(password,salt);
+    return hash;
+}
+async function compareHash(password,hashPassword)
+{
+    const result = await bcrypt.compare(password,hashPassword)
+    return result;
+}
